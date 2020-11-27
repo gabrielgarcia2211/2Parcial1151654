@@ -1,11 +1,18 @@
 package tienda.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import nomina.entities.Empleado;
+import tienda.dao.TiendaDao;
+import tienda.entities.Tienda;
 
 /**
  * Servlet implementation class TiendaServlet
@@ -44,8 +51,52 @@ public class TiendaServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+String parametro=request.getParameter("parametro");
+		
+		if (parametro.equals("registrarUsuario")) {
+			
+			String inputNombre = request.getParameter("inputNombre");  
+			String inputLema = request.getParameter("inputLema");
+			String inputDescripcion = request.getParameter("inputDescripcion");
+			String inputEmail = request.getParameter("inputEmail");
+			String inputPassword = request.getParameter("inputPassword");
+			String inputPropietario = request.getParameter("inputPropietario");
+			String inputFacebook = request.getParameter("inputFacebook");
+			String inputWeb = request.getParameter("inputWeb");
+			String inputImagen = request.getParameter("inputImagen");
+			
+			Tienda t = new Tienda();
+			TiendaDao tDao = new TiendaDao();
+			
+			
+			Tienda tienda = tDao.findByField("email", inputEmail);
+			
+			if(tienda!=null) {
+				request.setAttribute("resultado", 0);
+
+		        request.getRequestDispatcher("registro.jsp").forward(request, response);
+			}else {
+					
+				t.setId(0);
+				t.setClave(inputPassword);
+				t.setDescripcion(inputDescripcion);
+				t.setEmail(inputEmail);
+				t.setFacebook(inputFacebook);
+				t.setImagen(inputImagen);
+				t.setLema(inputLema);
+				t.setNombre(inputNombre);
+				t.setPropietario(inputPropietario);
+				t.setWeb(inputWeb);
+				
+				tDao.insert(t);
+				
+				
+				
+				response.sendRedirect("index.jsp");
+			}
+			
+				
+		}
 	}
 
 }
