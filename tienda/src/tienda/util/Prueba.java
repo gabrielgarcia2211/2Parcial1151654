@@ -1,5 +1,7 @@
 package tienda.util;
 
+import java.util.List;
+
 import tienda.dao.ClienteDao;
 import tienda.dao.ServicioDao;
 import tienda.dao.TiendaDao;
@@ -61,7 +63,14 @@ public class Prueba {
 		
 		//SEGUIR LA TIENDA POR UN SERVICIO
 		
-		
+		ClienteDao dao2 = new ClienteDao();
+		Cliente prueba2 = dao2.find(2);
+		TiendaDao dao = new TiendaDao();
+		Tienda prueba = dao.find(1);
+		List <Cliente> clientes = prueba.getClientes();		
+		clientes.add(prueba2);
+		prueba.setClientes(clientes);
+		dao.update(prueba);
 		
 		
 		

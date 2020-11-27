@@ -110,19 +110,25 @@ public class TiendaServlet extends HttpServlet {
 			TiendaDao tDao = new TiendaDao();
 			ClienteDao cDao = new ClienteDao();
 			
-			response.sendRedirect("servicio.jsp");
+		
 			Tienda tienda = tDao.findByField("email", inputEmail);
 			Cliente cliente = cDao.findByField("email", inputEmail);
 			
 			
 			if(tienda!=null) {
-				if(tienda.getClave()==inputPassword){
-					response.sendRedirect("servicio.jsp");
+				if(tienda.getClave().equals(inputPassword)){
+					List<Servicio> s =  new ArrayList<Servicio>();
+					ServicioDao server = new ServicioDao();
+					
+					s = server.findByFieldList("id", tienda.getId());
+					
+					request.setAttribute("data", s);
+					request.getRequestDispatcher("servicio.jsp").forward(request, response);
 				}
 			}
 			
 		    if(cliente!=null) {
-				if(cliente.getClave()==inputPassword){
+				if(cliente.getClave().equals(inputPassword)){
 					
 					List<Servicio> s =  new ArrayList<Servicio>();
 					ServicioDao server = new ServicioDao();
