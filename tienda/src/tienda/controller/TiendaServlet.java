@@ -10,8 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nomina.entities.Empleado;
+import java.util.List;
+
+import tienda.dao.ClienteDao;
+import tienda.dao.ServicioDao;
 import tienda.dao.TiendaDao;
+import tienda.entities.Cliente;
+import tienda.entities.Servicio;
 import tienda.entities.Tienda;
 
 /**
@@ -51,7 +56,7 @@ public class TiendaServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-String parametro=request.getParameter("parametro");
+		String parametro=request.getParameter("parametro");
 		
 		if (parametro.equals("registrarUsuario")) {
 			
@@ -96,7 +101,56 @@ String parametro=request.getParameter("parametro");
 			}
 			
 				
+		}if (parametro.equals("loginUsuario")) {
+			
+			String inputEmail = request.getParameter("inputEmail");  
+			String inputPassword = request.getParameter("inputPassword");
+			
+			
+			TiendaDao tDao = new TiendaDao();
+			ClienteDao cDao = new ClienteDao();
+			
+			response.sendRedirect("servicio.jsp");
+			Tienda tienda = tDao.findByField("email", inputEmail);
+			Cliente cliente = cDao.findByField("email", inputEmail);
+			
+			
+			if(tienda!=null) {
+				if(tienda.getClave()==inputPassword){
+					response.sendRedirect("servicio.jsp");
+				}
+			}
+			
+		    if(cliente!=null) {
+				if(cliente.getClave()==inputPassword){
+					
+					List<Servicio> s =  new ArrayList<Servicio>();
+					ServicioDao server = new ServicioDao();
+					
+					s = server.list();
+					
+					request.setAttribute("data", s);
+					request.getRequestDispatcher("servicio.jsp").forward(request, response);
+				
+				}
+			}
+			
+			request.setAttribute("resultado", 0);
+
+	        request.getRequestDispatcher("login.jsp").forward(request, response);
+			
+			
+			
 		}
 	}
 
 }
+
+
+
+
+
+
+
+
+

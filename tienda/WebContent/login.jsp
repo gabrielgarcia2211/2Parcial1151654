@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+      <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,21 +21,28 @@
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
               <h3 class="login-heading mb-4">Bienvenido</h3>
-              <form>
+               <form method="POST" action="TiendaServlet">
                 <div class="form-label-group">
-                  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                  <input type="email" id="inputEmail" class="form-control" name="inputEmail" placeholder="Email address" required autofocus>
                   <label for="inputEmail">Email</label>
                 </div>
 
                 <div class="form-label-group">
-                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                  <input type="password" id="inputPassword" class="form-control" name="inputPassword" placeholder="Password" required>
                   <label for="inputPassword">Password</label>
                 </div>
 
                 <div class="custom-control custom-checkbox mb-3">
                   <input type="checkbox" class="custom-control-input" id="customCheck1">
                   <label class="custom-control-label" for="customCheck1">Recordar Password</label>
+                  
+                   <c:if test='${resultado==0}'>
+							<div class="alert alert-danger" role="alert">
+								 Credenciales incorrectas!
+								</div>   			
+							   </c:if>
                 </div>
+                 <input type="hidden" name="parametro" value="loginUsuario">
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Ingresar</button>
 
               </form>
